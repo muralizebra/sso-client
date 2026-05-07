@@ -65,7 +65,42 @@ export const SSOLogin = ({ handleSSORedirect }) => {
 
         }
 
-
+    {screen === SCREEN.SSO_DOMAIN && (
+                                <div className="d-flex flex-column gap-2 mt-3">
+                                    <label className="form-label small fw-medium text-dark mb-1">
+                                        Work Email Address*
+                                    </label>
+                                    <Input
+                                        type="email"
+                                        placeholder="Enter your work email"
+                                        value={workEmail}
+                                        onChange={(e) => setWorkEmail(e.target.value)}
+                                        className="mb-3"
+                                    />
+                                    <div className="bg-white rounded-2 p-3" style={{ border: "2px solid #E8A000" }}>
+                                        <label className="form-label small fw-medium text-dark mb-1">
+                                            Enter Your Organization Domain*
+                                        </label>
+                                        <Input
+                                            type="text"
+                                            placeholder="e.g. contoso.onmicrosoft.com"
+                                            value={orgDomain}
+                                            onChange={(e) => setOrgDomain(e.target.value)}
+                                            className="mb-2"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn w-100 border-0 text-white fw-semibold"
+                                            style={{ background: "#E8A000", height: 44, borderRadius: 5 }}
+                                            onClick={handleSSODomainContinue}
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Please wait..." : "Continue"}
+                                        </button>
+                                    </div>
+                                 
+                                </div>
+                            )}
     </>
 
 }
