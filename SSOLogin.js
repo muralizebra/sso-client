@@ -7,58 +7,130 @@ const SCREEN = {
     SSO_DOMAIN: 'SSO_DOMAIN',
 }
 
+const triggerSSORedirect = (data) => {
+    if (data.protocol === 'saml') {
+        window.location.href = data.redirectUrl;
+    } else if (data.protocol === 'oidc') {
+        const params = new URLSearchParams({
+            client_id: data.client_id,
+            response_type: 'code',
+            redirect_uri: data.redirectUrl,
+            scope: 'openid profile email',
+            state: data.company_id,
+        });
+        window.location.href = `${data.sso_url}?${params.toString()}`;
+    } else {
+        message.error('Unsupported SSO protocol. Please contact your administrator.');
+    }
+}
+
+const fetchSSOConfig = async (payload) => {
+    let response;
+
+    try {
+        response = await fetch("http://localhost:3000/auth/domain-check", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+    } catch (networkErr) {
+        // fetch itself threw — network down, server unreachable, DNS failure
+        const err = new Error('Unable to reach the server. Please check your connection.');
+        err.code = 'NETWORK_ERROR';
+        throw err;
+    }
+
+    let data;
+    try {
+        data = await response.json();
+    } catch (parseErr) {
+        const err = new Error('Invalid response from server.');
+        err.code = 'PARSE_ERROR';
+        throw err;
+    }
+
+    if (!response.ok) {
+        const err = new Error(data.error?.message || 'Request failed');
+        err.statusCode = response.status;
+        err.code = data.error?.code;
+        throw err;
+    }
+
+    return data;
+}
+
+const getErrorMessage = (err) => {
+    switch (err.statusCode) {
+        case 400: return 'Invalid input. Please check your email or domain.';
+        case 401: return 'Authentication failed. Please try again.';
+        case 404: return 'SSO not configured for this email or domain.';
+        case 429: return 'Too many attempts. Please wait and try again.';
+        case 500: return 'Server error. Please try again later.';
+        default:
+            return err.message || 'Something went wrong. Please try again.';
+    }
+}
+
 export const SSOLogin = ({ handleSSORedirect }) => {
     const [screen, setScreen] = useState(SCREEN.SSO_BUTTON);
     const [ssoEmail, setSSOEmail] = useState("");
     const [orgDomain, setOrgDomain] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const fetchSSOConfig = async (payload) => {
-        const response = await fetch("http://localhost:3000/auth/domain-check", {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        return response.json();
-    }
-
     const handleEmailContinue = async () => {
+        if (!ssoEmail.trim()) {
+            message.error('Please enter your email address.');
+            return;
+        }
+
         setLoading(true);
         try {
             const data = await fetchSSOConfig({ email: ssoEmail });
 
             if (data.found) {
-                handleSSORedirect(data); // redirect to SSO
+                triggerSSORedirect(data);
             } else if (data.promptOrgDomain) {
-                setScreen(SCREEN.SSO_DOMAIN); // show domain input
+                setScreen(SCREEN.SSO_DOMAIN);
             } else {
-                message.error(data.error?.message || 'SSO not configured for this email');
+                message.error('SSO not configured for this email.');
             }
         } catch (err) {
-            message.error('Something went wrong. Please try again.');
+            if (err.code === 'NETWORK_ERROR') {
+                message.error(err.message);
+            } else {
+                message.error(getErrorMessage(err));
+            }
         } finally {
             setLoading(false);
         }
     }
 
     const handleDomainContinue = async () => {
+        if (!orgDomain.trim()) {
+            message.error('Please enter your organization domain.');
+            return;
+        }
+
         setLoading(true);
         try {
             const data = await fetchSSOConfig({ domain: orgDomain });
 
             if (data.found) {
-                handleSSORedirect(data); // redirect to SSO
+                triggerSSORedirect(data);
             } else {
-                message.error('SSO not configured for this domain');
+                message.error('SSO not configured for this domain.');
             }
         } catch (err) {
-            message.error('Something went wrong. Please try again.');
+            if (err.code === 'NETWORK_ERROR') {
+                message.error(err.message);
+            } else {
+                message.error(getErrorMessage(err));
+            }
         } finally {
             setLoading(false);
         }
     }
 
-    // Screen 1: Just the button
     if (screen === SCREEN.SSO_BUTTON) {
         return (
             <Form.Item>
@@ -74,7 +146,6 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         )
     }
 
-    // Screen 2: Email input
     if (screen === SCREEN.SSO_EMAIL) {
         return (
             <>
@@ -84,6 +155,7 @@ export const SSOLogin = ({ handleSSORedirect }) => {
                         placeholder="Enter your SSO email"
                         value={ssoEmail}
                         onChange={(e) => setSSOEmail(e.target.value)}
+                        onPressEnter={handleEmailContinue}
                         style={{ borderRadius: '4px', borderColor: '#3e82f7' }}
                     />
                 </Form.Item>
@@ -102,7 +174,6 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         )
     }
 
-    // Screen 3: Domain input (shown when email domain not found)
     if (screen === SCREEN.SSO_DOMAIN) {
         return (
             <div className="d-flex flex-column gap-2 mt-3">
@@ -124,6 +195,7 @@ export const SSOLogin = ({ handleSSORedirect }) => {
                         placeholder="e.g. contoso.onmicrosoft.com"
                         value={orgDomain}
                         onChange={(e) => setOrgDomain(e.target.value)}
+                        onPressEnter={handleDomainContinue}
                         className="mb-2"
                     />
                     <button
