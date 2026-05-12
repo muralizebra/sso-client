@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom'; // React Router v5
 import { Button, Descriptions, Result, Spin, Tag, Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,8 +22,9 @@ function resolveErrorMessage(code, fallback) {
 }
 
 export default function OIDCCallback({ apiBase = '' }) {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const history = useHistory();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
   const [status, setStatus] = useState('loading'); // 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
   const [tokenResponse, setTokenResponse] = useState(null);
@@ -74,7 +75,7 @@ export default function OIDCCallback({ apiBase = '' }) {
         setStatus('success');
 
         // TODO: redirect to dashboard once route exists
-        // navigate('/dashboard');
+        // history.push('/dashboard');
       } catch {
         setErrorMsg('Network error. Please check your connection and try again.');
         setStatus('error');
@@ -102,7 +103,7 @@ export default function OIDCCallback({ apiBase = '' }) {
             title="Sign-in failed"
             subTitle={errorMsg}
             extra={
-              <Button type="primary" block onClick={() => navigate('/')}>
+              <Button type="primary" block onClick={() => history.push('/')}>
                 Back to sign-in
               </Button>
             }
