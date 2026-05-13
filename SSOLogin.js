@@ -279,3 +279,4 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         )
     }
 }
+https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize?client_id=e2973f68-2627-45f1-9417-84265f3648b1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Foidc%2Fcallback&scope=openid+profile+email+groups&state=260b9021-ea6e-49ac-bda5-ef324d966b75&nonce=b3b8130b-389f-433e-ab2e-85749c60c4fa
