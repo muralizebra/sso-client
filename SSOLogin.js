@@ -8,39 +8,88 @@ const SCREEN = {
     SSO_DOMAIN: 'SSO_DOMAIN',
 }
 
-
-const triggerSSORedirect = (data) => {
-    if (data.protocol === 'saml') {
-
-        // SAML: backend returns redirectUrl directly (not inside config)
+const triggerSSORedirect = async (data) => {
+    if (data.protocol === "saml") {
         window.location.href = data.redirectUrl;
-
-    } else if (data.protocol === 'oidc') {
-
-        // Generate state and nonce on the frontend (client_secret_post method)
-        const state = crypto.randomUUID();
-        const nonce = crypto.randomUUID();
-
-        // Save these to sessionStorage — needed at the callback page
-        sessionStorage.setItem('oidc_company_id', data.company_id);
-        sessionStorage.setItem('oidc_state', state);
-        sessionStorage.setItem('oidc_nonce', nonce);
-
-        const params = new URLSearchParams({
-            client_id: data.config.client_id,
-            response_type: 'code',
-            redirect_uri: data.config.redirect_uri,
-            scope: data.config.scope,
-            state,
-            nonce,
-        });
-
-        window.location.href = `${data.config.sso_url}?${params.toString()}`;
-
-    } else {
-        message.error('Unsupported SSO protocol. Please contact your administrator.');
+        return;
     }
+
+    if (data.protocol !== "oidc") {
+        message.error("Unsupported SSO protocol. Please contact your administrator.");
+        return;
+    }
+
+    const response = await fetch("http://localhost:5000/auth/domain-check", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            email: data.email,
+            organizationName: data.organizationName || "",
+        }),
+    });
+
+    const result = await response.json();
+    console.log(result)
+    if (!response.ok) {
+        if (result.requiresOrganizationName) {
+            throw new Error(result.error);
+        }
+
+        throw new Error(result.error || "Unable to start SSO sign-in");
+    }
+
+    const params = new URLSearchParams({
+        client_id: result.clientId,
+        response_type: result.responseType,
+        redirect_uri: result.redirectUri,
+        scope: result.scope,
+        state: result.state,
+        login_hint: result.loginHint,
+    });
+
+    if (result.codeChallenge && result.codeChallengeMethod) {
+        params.set("code_challenge", result.codeChallenge);
+        params.set("code_challenge_method", result.codeChallengeMethod);
+    }
+
+    window.location.href = `${result.authorizationEndpoint}?${params.toString()}`;
 };
+
+// const triggerSSORedirect = (data) => {
+//     if (data.protocol === 'saml') {
+
+//         // SAML: backend returns redirectUrl directly (not inside config)
+//         window.location.href = data.redirectUrl;
+
+//     } else if (data.protocol === 'oidc') {
+
+//         // Generate state and nonce on the frontend (client_secret_post method)
+//         const state = crypto.randomUUID();
+//         const nonce = crypto.randomUUID();
+
+//         // Save these to sessionStorage — needed at the callback page
+//         sessionStorage.setItem('oidc_company_id', data.company_id);
+//         sessionStorage.setItem('oidc_state', state);
+//         sessionStorage.setItem('oidc_nonce', nonce);
+
+//         const params = new URLSearchParams({
+//             client_id: data.config.client_id,
+//             response_type: 'code',
+//             redirect_uri: data.config.redirect_uri,
+//             scope: data.config.scope,
+//             state,
+//             nonce,
+//         });
+
+//         window.location.href = `${data.config.sso_url}?${params.toString()}`;
+
+//     } else {
+//         message.error('Unsupported SSO protocol. Please contact your administrator.');
+//     }
+// };
 
 const fetchSSOConfig = async (payload) => {
     let response;
@@ -104,7 +153,7 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         setLoading(true);
         try {
             const data = await fetchSSOConfig({ email: ssoEmail });
-            console.log("SSO Config => ",data)
+            console.log("SSO Config => ", data)
             if (data.found) {
                 triggerSSORedirect(data);
             } else if (data.promptOrgDomain) {
