@@ -309,3 +309,7 @@ const data = {
             state,
             nonce,
         });
+     <Route
+          path={`${match.url}/oidc-callback`}
+          component={lazy(() => import(`./authentication/oidc-callback`))}
+        />
