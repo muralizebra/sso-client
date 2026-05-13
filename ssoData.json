@@ -1,0 +1,82 @@
+{
+  "sso_integrations": [
+    {
+      "company_id": "zdna-company-456",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "c33d0fb2-7eaa-4fb0-aa7a-0390ed6b6d8d",
+      "domains": "labtech24.in",
+      "protocol": "saml",
+      "sso_status": "active"
+    },
+    {
+      "company_id": "zdna-company-789",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "05cd751c-063e-4c2f-9806-13819e3be8ca",
+      "domains": "sowmiyalakshmi44gmail.onmicrosoft.com",
+      "protocol": "saml",
+      "sso_status": "active"
+    },
+    {
+      "company_id": "zdna-company-123",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "c33d0fb2-7eaa-4fb0-aa7a-0390ed6b6d8d",
+      "domains": "contoso.com",
+      "protocol": "oidc",
+      "sso_status": "active"
+    },
+    {
+      "company_id": "zdna-company-001",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "2c761afb-5a70-452a-ab62-b98b90a6e556",
+      "domains": "zdna.com",
+      "protocol": "oidc",
+      "sso_status": "active"
+    },
+    {
+      "company_id": "zdna-company-001",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "2c761afb-5a70-452a-ab62-b98b90a6e556",
+      "domains": "zdnacloud.com",
+      "protocol": "oidc",
+      "sso_status": "active"
+    }
+  ],
+  "saml_configurations": [
+    {
+      "company_id": "zdna-company-456",
+      "entity_id": "http://localhost:3000/auth/metadata",
+      "sso_url": "https://login.microsoftonline.com/c33d0fb2-7eaa-4fb0-aa7a-0390ed6b6d8d/saml2",
+      "acs_url": "http://localhost:3000/auth/callback",
+      "certificate": "MIIC8DCCAdigAwIBAgIQFYH2af562JVKwJJOjE2z4jANBgkqhkiG9w0BAQsFADA0MTIwMAYDVQQDEylNaWNyb3NvZnQgQXp1cmUgRmVkZXJhdGVkIFNTTyBDZXJ0aWZpY2F0ZTAeFw0yNjA0MDEwOTIyMzNaFw0yOTA0MDEwOTIyMzNaMDQxMjAwBgNVBAMTKU1pY3Jvc29mdCBBenVyZSBGZWRlcmF0ZWQgU1NPIENlcnRpZmljYXRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp4U5to+s3ZEEwynLGzIPhnj99rDdfaBmToHqt4Wf3tCzr9i87/KSNB8YQvEMftacnqmOsz5bGh5o+mkAQxTxPTLv6n7EboHMWKiNQU/9KerHMlOhXWqb7GalUv9GFZ5a/I1ksJg+C/oFWVOftbpWLkTazfIaC7m2yo7FklGT5A25V3HSnl80f+kH6wCg1ldGDuJioVeUS57RBz11h3AQNEdPCV2VxkWMASSrud7Jr8HNn+OGgwnXd3VDduJguiPWgJI/Lw4gBFMBqIAuijrrHsZ4NNmcL++mBZ5GKuDAwKnmOUhqzLw/uLaB7O1vzx6vhGPAMJ2TWupduH7L/wv3UQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQBzTMKRriBywCERoJGfZMNtAS4l/BCKyqCborJOL+k4VHll5Vdx4lnVQbTzUdUMiz0ecgK03C/0qQlc2pUv+8WyT9J/IlphdV7wIWpKZ8m1WnlHhhMJDpccjUXhvDjLsuVrbPFL3fsx6A2MafQxXqiaLUUgJy10XQc1wTuVLOqM+VqonsljT81wgpM1Gow0UboWQA5IRpxqBNtImP3D3yZqYHQi1IwgPafD/6SYprvziGmPmk+Z31Gvd1m91fP57HjUNVyS3vRvWhJ/4r5jEUwtoNl5cWpYu8G39ZdAV29L7ZSO6ZnSukT7HLjL7CMlY2+em7/COvd5DyDixZTPYyE2",
+      "cert_expiry": "2029-04-01T09:22:33Z"
+    },
+    {
+      "company_id": "zdna-company-789",
+      "entity_id": "http://localhost:3000/auth/metadata",
+      "sso_url": "https://login.microsoftonline.com/05cd751c-063e-4c2f-9806-13819e3be8ca/saml2",
+      "acs_url": "http://localhost:3000/api/sso/saml/callback",
+      "certificate": "MIIC8DCCAdigAwIBAgIQGKc8KgnuG4dCZbCV6lW9hzANBgkqhkiG9w0BAQsFADA0MTIwMAYDVQQDEylNaWNyb3NvZnQgQXp1cmUgRmVkZXJhdGVkIFNTTyBDZXJ0aWZpY2F0ZTAeFw0yNjAzMjgxMTAzMTZaFw0yOTAzMjgxMTAzMTZaMDQxMjAwBgNVBAMTKU1pY3Jvc29mdCBBenVyZSBGZWRlcmF0ZWQgU1NPIENlcnRpZmljYXRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2GbBYgJrP5QD7gArxZ0/kEu/YBX07MnfnAhKY5Z+ROBhgIHGRVNFxxt/BiyzpFuwwP9jZlCcpmbmZj117M2pynT9uY+ucA7RJiDkHmpdYwHZ1+aL5+7LLl1t1UTLdrv9/2RbQ7zTQXrUXuXuzPrMnm8GUV60M4xMPthCbaLH+/MazWW5yy32zfndh8Hru2v3+Io/6ivJTrgRyJqVdLfkyY7EqWNL/lyG4eGcHhV/KJWCxAHrHO7bKqW1vDGPXcXshubvHIpqBYTuSCWL8fsZIRL8UqhoMDO/b9a9wSk3uHBND0VGs2qIszU0nP9W9mG+LpvVESEinm9WyKsBSZ807QIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAi3ViNayApEs1enZVOWLIqqGmiCQlAV51/oQxj7LYvafoDHGEgk1IyHnJnghENbnjcBAFzQOomv4tzXS+gx4Mdkryx1E3vC+3ZANlS3P1BuzmNIgzXByN5CjKQhD4zPPKJo11SDuEhnUmJ/8rPxsC87dSfdnu0Llv/qxsdg4mwUjUHuxD4wuoFYgKm8ey8Va6iim8e9M7wJoc6ocmW+we/4gJT1cvekwW2KFzKOsvUzVWcwn6yslhGBp5HgI9j8CTaCPxiNnDSWJB1Cwcfc/ShAYCnuap+8UG9/zpc46NpI2opSFxrWAb5nd4XLdeiV/0cFqvTT3pY9dNWSXadSX8h",
+      "cert_expiry": "2029-03-28T11:03:16Z"
+    }
+  ],
+  "oidc_configurations": [
+    {
+      "company_id": "zdna-company-123",
+      "client_id": "6bd04a3b-1400-4215-af9f-29fea245d4f0",
+      "client_auth_method": "client_secret",
+      "client_secret":" ",
+      "scope": "openid profile email",
+      "sso_url": "https://login.microsoftonline.com/05cd751c-063e-4c2f-9806-13819e3be8ca/oauth2/v2.0/authorize",
+      "redirect_uri": "http://localhost:3000/auth/oidc/callback"
+    },
+    {
+      "company_id": "zdna-company-001",
+      "client_id": "e2973f68-2627-45f1-9417-84265f3648b1",
+      "client_auth_method": "none",
+      "client_secret": "[redacted from ENTRA_CLIENT_SECRET]",
+      "scope": "openid profile email",
+      "sso_url": "https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize",
+      "redirect_uri": "http://localhost:5763/auth/oidc/callback"
+    }
+  ]
+}
