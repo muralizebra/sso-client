@@ -279,4 +279,33 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         )
     }
 }
+
 https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize?client_id=e2973f68-2627-45f1-9417-84265f3648b1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Foidc%2Fcallback&scope=openid+profile+email+groups&state=260b9021-ea6e-49ac-bda5-ef324d966b75&nonce=b3b8130b-389f-433e-ab2e-85749c60c4fa
+
+const data = {
+    "found": true,
+    "protocol": "oidc",
+    "message": "Redirecting to Microsoft Entra...",
+    "company_id": "zdna-company-001",
+    "client_auth_method": "none",
+    "config": {
+        "client_id": "e2973f68-2627-45f1-9417-84265f3648b1",
+        "sso_url": "https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize",
+        "redirect_uri": "http://localhost:3000/auth/oidc/callback",
+        "scope": "openid profile email groups",
+        "state": "4LuBjNYmToyA5yEtH7HAQw",
+        "nonce": "m_5O9CuYr0GbdRUY0ThjMg",
+        "code_challenge": "KBsozK7n6k7Ks-tF3LZUOvObc35yXPxtXrticelXTlI",
+        "code_challenge_method": "S256",
+        "response_mode": "query"
+    }
+}
+
+       const params = new URLSearchParams({
+            client_id: data.config.client_id,
+            response_type: 'code',
+            redirect_uri: data.config.redirect_uri,
+            scope: data.config.scope,
+            state,
+            nonce,
+        });
