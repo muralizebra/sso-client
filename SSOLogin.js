@@ -1,3 +1,4 @@
+
 import { Button, Form, Input, message } from "antd"
 import { useState } from "react"
 
@@ -7,28 +8,45 @@ const SCREEN = {
     SSO_DOMAIN: 'SSO_DOMAIN',
 }
 
+
 const triggerSSORedirect = (data) => {
     if (data.protocol === 'saml') {
+
+        // SAML: backend returns redirectUrl directly (not inside config)
         window.location.href = data.redirectUrl;
+
     } else if (data.protocol === 'oidc') {
+
+        // Generate state and nonce on the frontend (client_secret_post method)
+        const state = crypto.randomUUID();
+        const nonce = crypto.randomUUID();
+
+        // Save these to sessionStorage — needed at the callback page
+        sessionStorage.setItem('oidc_company_id', data.company_id);
+        sessionStorage.setItem('oidc_state', state);
+        sessionStorage.setItem('oidc_nonce', nonce);
+
         const params = new URLSearchParams({
-            client_id: data.client_id,
+            client_id: data.config.client_id,
             response_type: 'code',
-            redirect_uri: data.redirectUrl,
-            scope: 'openid profile email',
-            state: data.company_id,
+            redirect_uri: data.config.redirect_uri,
+            scope: data.config.scope,
+            state,
+            nonce,
         });
-        window.location.href = `${data.sso_url}?${params.toString()}`;
+
+        window.location.href = `${data.config.sso_url}?${params.toString()}`;
+
     } else {
         message.error('Unsupported SSO protocol. Please contact your administrator.');
     }
-}
+};
 
 const fetchSSOConfig = async (payload) => {
     let response;
 
     try {
-        response = await fetch("http://localhost:3000/auth/domain-check", {
+        response = await fetch("http://localhost:5000/auth/domain-check", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -86,7 +104,7 @@ export const SSOLogin = ({ handleSSORedirect }) => {
         setLoading(true);
         try {
             const data = await fetchSSOConfig({ email: ssoEmail });
-
+            console.log("SSO Config => ",data)
             if (data.found) {
                 triggerSSORedirect(data);
             } else if (data.promptOrgDomain) {
