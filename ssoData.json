@@ -39,6 +39,14 @@
       "domains": "zdnacloud.com",
       "protocol": "oidc",
       "sso_status": "active"
+    },
+    {
+      "company_id": "zdna-pkce-001",
+      "idp": "microsoft_entra",
+      "entra_tenant_id": "2c761afb-5a70-452a-ab62-b98b90a6e556",
+      "domains": "zdna-pkce.com",
+      "protocol": "oidc",
+      "sso_status": "active"
     }
   ],
   "saml_configurations": [
@@ -61,22 +69,30 @@
   ],
   "oidc_configurations": [
     {
+      "company_id": "zdna-pkce-001",
+      "client_id": "477d8669-114c-41ff-8df9-03df109313e7",
+      "client_auth_method": "none",
+      "scope": "openid profile email",
+      "sso_url": "https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize",
+      "redirect_uri": "http://localhost:5173/auth/oidc/callback"
+    },
+    {
       "company_id": "zdna-company-123",
       "client_id": "6bd04a3b-1400-4215-af9f-29fea245d4f0",
       "client_auth_method": "client_secret",
       "client_secret":" ",
       "scope": "openid profile email",
       "sso_url": "https://login.microsoftonline.com/05cd751c-063e-4c2f-9806-13819e3be8ca/oauth2/v2.0/authorize",
-      "redirect_uri": "http://localhost:3000/auth/oidc/callback"
+      "redirect_uri": "http://localhost:5173/auth/oidc/callback"
     },
     {
       "company_id": "zdna-company-001",
       "client_id": "e2973f68-2627-45f1-9417-84265f3648b1",
-      "client_auth_method": "none",
-      "client_secret": "[redacted from ENTRA_CLIENT_SECRET]",
+      "client_auth_method": "client_secret",
+      "client_secret": "r7W8Q~h7v2j3wtkwQbSEsXqwohz4KVJsImaHidgK",
       "scope": "openid profile email",
       "sso_url": "https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize",
-      "redirect_uri": "http://localhost:5763/auth/oidc/callback"
+      "redirect_uri": "http://localhost:5173/auth/oidc/callback"
     }
   ]
 }
