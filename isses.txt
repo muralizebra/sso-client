@@ -1,1 +1,6 @@
 g1h8Q~GqTlOBu2H0p06lxqsUlKdz7xdp5SMQkcds
+
+{
+  "code": 500,
+  "message": "Token exchange failed: HTTP 401 — {\"error\":\"invalid_client\",\"error_description\":\"AADSTS7000215: Invalid client secret provided. Ensure the secret being sent in the request is the client secret value, not the client secret ID, for a secret added to app 'e2973f68-2627-45f1-9417-84265f3648b1'. Trace ID: 57d5180f-2661-4707-a9a9-c23ffc900000 Correlation ID: fbea26b2-52ef-4d0a-a095-2952bc7e8347 Timestamp: 2026-05-15 09:17:57Z\",\"error_codes\":[7000215],\"timestamp\":\"2026-05-15 09:17:57Z\",\"trace_id\":\"57d5180f-2661-4707-a9a9-c23ffc900000\",\"correlation_id\":\"fbea26b2-52ef-4d0a-a095-2952bc7e8347\",\"error_uri\":\"https://login.microsoftonline.com/error?code=7000215\"}"
+}
