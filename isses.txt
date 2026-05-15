@@ -1,2 +1,1 @@
-
-"https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize?client_id=e2973f68-2627-45f1-9417-84265f3648b1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Foidc%2Fcallback&scope=openid+profile+email&state=ldc8UShIG2wHtUE5U58imA&nonce=u2QcknIMATBTJFbaZjs0ww&response_mode=query"
+"https://login.microsoftonline.com/2c761afb-5a70-452a-ab62-b98b90a6e556/oauth2/v2.0/authorize?client_id=e2973f68-2627-45f1-9417-84265f3648b1&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Foidc%2Fcallback&scope=openid+profile+email+groups&state=vNvfQQ9iLxpvJGW0lotjKg&nonce=UCM5-W5EtuvhInwyDTBPZA&response_mode=query&code_challenge=nOOs6tcGXAPu9X_6oHT_ErsZA57vm4ZWt3zhBG4rVRo&code_challenge_method=S256"
