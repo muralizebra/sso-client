@@ -28,7 +28,7 @@ const buildOidcAuthorizeUrl = (config) => {
   return `${config.sso_url}?${params.toString()}`;
 };
 
-const triggerSso = (payload) => {
+const triggerSSORedirect = (payload) => {
   if (payload.protocol === 'saml') {
     window.location.href = payload.redirectUrl;
     return;
@@ -65,14 +65,13 @@ function SsoConfigLookup() {
       });
 
       const payload = await response.json();
-      console.log(payload);
       if (!response.ok) {
         throw new Error(payload?.error?.message || 'Unable to fetch SSO config.');
       }
 
       if (payload.found) {
         setState({ loading: true, error: '', result: null });
-        triggerSso(payload);
+        triggerSSORedirect(payload);
         return;
       }
 
